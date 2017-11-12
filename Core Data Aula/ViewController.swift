@@ -25,17 +25,17 @@ class ViewController: UIViewController {
 //        let ordenacaoPreco = NSSortDescriptor(key: "preco", ascending: false)
         
         //aplicar filtros
-//        let predicate = NSPredicate(format: "descricao == %@", "Agua")
-        let filtroDescricao = NSPredicate(format: "descricao contains [c] %@", "gu")
+        let predicate = NSPredicate(format: "descricao == [c] %@", "gilette")
+//        let filtroDescricao = NSPredicate(format: "descricao contains [c] %@", "gu")
 //        let predicate = NSPredicate(format: "descricao beginswith [c] %@", "g")
-        let filtroPreco = NSPredicate(format: "preco >= %@", "5.00")
+//        let filtroPreco = NSPredicate(format: "preco >= %@", "5.00")
         
-        let combinacao = NSCompoundPredicate(andPredicateWithSubpredicates: [filtroDescricao,filtroPreco])
+//        let combinacao = NSCompoundPredicate(andPredicateWithSubpredicates: [filtroDescricao,filtroPreco])
         
         
         //Aplicar
         requisicao.sortDescriptors = [ordenacaoAZ]
-        requisicao.predicate = combinacao
+        requisicao.predicate = predicate
         
         do {
             let produtos = try context.fetch(requisicao)
@@ -49,6 +49,26 @@ class ViewController: UIViewController {
                     let precoProduto = produto.value(forKey: "preco")
                     
                     print("Produto \(_contador+1):\nDescricao: \(descricaoProduto ?? "Sem Descricao")\nCor: \(corProduto ?? "Sem Cor")\nPreco: \(precoProduto ?? 0)\n---------------------")
+                    
+                    //remover
+                    context.delete(produto)
+                    do {
+                        try context.save()
+                        print("Objeto removido com sucesso")
+                    } catch {
+                        print("Erro ao remover o objeto")
+                    }
+                    
+//                    //atualizar produto
+//                    produto.setValue(20.00, forKey: "preco")
+//                    produto.setValue("branco", forKey: "cor")
+//
+//                    do {
+//                        try context.save()
+//                        print("Sucesso ao atualizar o produto")
+//                    } catch {
+//                        print("Erro ao salvar o produto")
+//                    }
                     
                     _contador += 1
                 }
